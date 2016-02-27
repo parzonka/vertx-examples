@@ -31,9 +31,6 @@ public class MainVerticle extends AbstractVerticle {
 		// say hello
 		router.route(HttpMethod.GET, "/").handler(html("<h1>Hello World!</h1>"));
 
-		// return a single message
-		router.route(HttpMethod.GET, "/message").handler(json(new Message(42, "Some Content")));
-
 		// return a list of messages
 		router.route(HttpMethod.GET, "/messages").handler(
 				json(new Message(42, "Some Content"), new Message(43, "More Content")));

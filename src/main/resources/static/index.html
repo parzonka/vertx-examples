@@ -6,13 +6,15 @@
 	src="//cdn.jsdelivr.net/jquery/1.11.2/jquery.min.js"></script>
 </head>
 <body>
-	<div class="ajax">TODO</div>
+	<div class="ajax"></div>
 
 	<script type="text/javascript">
     $(document).ready(function() {
-      
+    	$.get("/messages", function( data ) {
+	  		$(".ajax").html("<h1>" + data[0].content + "</h1>");
+	  	});
     });
   </script>
-  
+
 </body>
 </html>
