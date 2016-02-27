@@ -1,0 +1,45 @@
+# eclipse conf file
+.settings
+.manager
+.scala_dependencies
+
+# idea
+.idea
+*.iml
+
+# building
+*.class
+target
+build
+null
+tmp*
+temp
+dist
+test-output
+build.log
+
+# other scm
+.svn
+.CVS
+.hg*
+
+#OSX
+target/
+Safari*OLD*
+.DS_Store
+.metadata
+Icon?
+
+#other
+*/bin/
+*~
+*.bak
+#*.off
+*.old
+.cache*
+*.iml
+*.ipr
+*.iws
+*.prefs
+*.db
+*.tmproj
