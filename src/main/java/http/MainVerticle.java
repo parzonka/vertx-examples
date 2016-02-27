@@ -2,6 +2,7 @@ package http;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Handler;
+import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.Json;
 import io.vertx.ext.web.Router;
@@ -27,13 +28,15 @@ public class MainVerticle extends AbstractVerticle {
 
 		Router router = Router.router(vertx);
 
-		router.route("/").handler(html("<h1>Hello World!</h1>"));
+		// say hello
+		router.route(HttpMethod.GET, "/").handler(html("<h1>Hello World!</h1>"));
 
 		// return a single message
-		router.route("/message").handler(json(new Message(42, "Some Content")));
+		router.route(HttpMethod.GET, "/message").handler(json(new Message(42, "Some Content")));
 
 		// return a list of messages
-		router.route("/messages").handler(json(new Message(42, "Some Content"), new Message(43, "More Content")));
+		router.route(HttpMethod.GET, "/messages").handler(
+				json(new Message(42, "Some Content"), new Message(43, "More Content")));
 
 		// disabling caches allows updates in browser
 		router.route("/static/*").handler(
