@@ -24,7 +24,8 @@ public class MainVerticle extends AbstractVerticle {
 		router.route("/").handler(html("<h1>Hello World!</h1>"));
 
 		// disabling caches allows updates in browser
-		router.route("/static/*").handler(StaticHandler.create("static").setCachingEnabled(false));
+		router.route("/static/*").handler(
+				StaticHandler.create("static").setCachingEnabled(!Boolean.getBoolean("vertx.disableFileCaching")));
 
 		vertx.createHttpServer().requestHandler(router::accept)
 				.listen(Integer.getInteger("server.port", 8080), System.getProperty("server.host", "0.0.0.0"));
