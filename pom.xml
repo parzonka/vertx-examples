@@ -13,6 +13,7 @@
 		<!-- dependencies -->
 		<junit.version>4.12</junit.version>
 		<projectlombok.version>1.16.6</projectlombok.version>
+		<vertx.version>3.2.1</vertx.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -24,7 +25,12 @@
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-core</artifactId>
-			<version>3.2.1</version>
+			<version>${vertx.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.vertx</groupId>
+			<artifactId>vertx-web</artifactId>
+			<version>${vertx.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
