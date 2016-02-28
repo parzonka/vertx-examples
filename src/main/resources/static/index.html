@@ -10,7 +10,7 @@
 
 	<script type="text/javascript">
     $(document).ready(function() {
-    	$.get("/messages", function( data ) {
+    	$.get("/api/messages", function( data ) {
 	  		$(".ajax").html("<h1>" + data[0].content + "</h1>");
 	  	});
     });

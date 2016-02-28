@@ -3,7 +3,6 @@ package http;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Handler;
 import io.vertx.core.http.HttpMethod;
-import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.Json;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
@@ -11,13 +10,12 @@ import io.vertx.ext.web.handler.StaticHandler;
 
 public class MainVerticle extends AbstractVerticle {
 
-	private static Handler<RoutingContext> html(String html) {
-		return (RoutingContext rc) -> {
-			HttpServerResponse response = rc.response();
-			response.putHeader("content-type", "text/html").end(html);
-		};
-	}
-
+	/**
+	 * Ends response with a JSON list of objects
+	 * 
+	 * @param objects
+	 * @return
+	 */
 	private static Handler<RoutingContext> json(Object... objects) {
 		return (RoutingContext rc) -> rc.response().putHeader("content-type", "application/json; charset=utf-8")
 				.end(Json.encode(objects));
@@ -28,15 +26,11 @@ public class MainVerticle extends AbstractVerticle {
 
 		Router router = Router.router(vertx);
 
-		// say hello
-		router.route(HttpMethod.GET, "/").handler(html("<h1>Hello World!</h1>"));
-
 		// return a list of messages
-		router.route(HttpMethod.GET, "/messages").handler(
-				json(new Message(42, "Some Content"), new Message(43, "More Content")));
+		router.route(HttpMethod.GET, "/api/messages").handler(json(new Message(42, "Hello World!")));
 
-		// disabling caches allows updates in browser
-		router.route("/static/*").handler(
+		// disabled cache for static asset reload
+		router.route("/*").handler(
 				StaticHandler.create("static").setCachingEnabled(!Boolean.getBoolean("vertx.disableFileCaching")));
 
 		vertx.createHttpServer().requestHandler(router::accept)
