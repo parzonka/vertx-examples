@@ -27,11 +27,12 @@ public class MainVerticle extends AbstractVerticle {
 		Router router = Router.router(vertx);
 
 		// return a list of messages
-		router.route(HttpMethod.GET, "/api/messages").handler(json(new Message(42, "Hello World!")));
+		router.route(HttpMethod.GET, "/api/messages").handler(
+				json(new Message(42, "Hello World!"), new Message(42, "Hello World!")));
 
 		// disabled cache for static asset reload
 		router.route("/*").handler(
-				StaticHandler.create("static").setCachingEnabled(!Boolean.getBoolean("vertx.disableFileCaching")));
+				StaticHandler.create().setCachingEnabled(!Boolean.getBoolean("vertx.disableFileCaching")));
 
 		vertx.createHttpServer().requestHandler(router::accept)
 				.listen(Integer.getInteger("server.port", 8080), System.getProperty("server.host", "0.0.0.0"));
