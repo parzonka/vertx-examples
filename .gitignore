@@ -10,7 +10,6 @@
 # building
 *.class
 target
-build
 null
 tmp*
 temp
