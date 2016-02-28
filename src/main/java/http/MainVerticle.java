@@ -3,6 +3,7 @@ package http;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Handler;
 import io.vertx.core.http.HttpMethod;
+import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.Json;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
@@ -34,7 +35,11 @@ public class MainVerticle extends AbstractVerticle {
 		router.route("/*").handler(
 				StaticHandler.create().setCachingEnabled(!Boolean.getBoolean("vertx.disableFileCaching")));
 
-		vertx.createHttpServer().requestHandler(router::accept)
+		// enables http compression (e.g. gzip js)
+		final HttpServerOptions options = new HttpServerOptions().setCompressionSupported(true);
+
+		// create server
+		vertx.createHttpServer(options).requestHandler(router::accept)
 				.listen(Integer.getInteger("server.port", 8080), System.getProperty("server.host", "0.0.0.0"));
 	}
 }
