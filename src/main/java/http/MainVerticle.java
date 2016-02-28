@@ -28,7 +28,7 @@ public class MainVerticle extends AbstractVerticle {
 
 		// return a list of messages
 		router.route(HttpMethod.GET, "/api/messages").handler(
-				json(new Message(42, "Hello World!"), new Message(42, "Hello World!")));
+				json(new Message(42, "foo"), new Message(43, "bar"), new Message(44, "baz")));
 
 		// disabled cache for static asset reload
 		router.route("/*").handler(
