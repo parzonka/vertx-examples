@@ -31,8 +31,10 @@ export default {
   methods: {
     getAll: () => axios.get('api/messages').then(res => self.messages = res.data),
     post: () => {
-      axios.post('api/messages', {id: 1, content: self.content}).then(self.getAll)
-      self.content = ''
+      if (self.content !== '') {
+        axios.post('api/messages', {id: 1, content: self.content}).then(self.getAll)
+        self.content = ''
+      }
     }
   },
   ready() {
