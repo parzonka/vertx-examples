@@ -1,5 +1,7 @@
 package web;
 
+import io.vertx.core.Handler;
+import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.Json;
 import io.vertx.ext.unit.TestContext;
 
@@ -7,13 +9,15 @@ import org.junit.Test;
 
 public class MainVerticleTest extends AbstractIntegrationTest {
 
+	public void getAndVerifyBody(String requestURI, Handler<Buffer> bodyVerifier) {
+		vertx.createHttpClient().getNow(8080, "localhost", requestURI, response -> response.bodyHandler(bodyVerifier));
+	}
+
 	@Test
 	public void getMessages(TestContext context) {
-		vertx.createHttpClient().getNow(8080, "localhost", "/api/messages", response -> {
-			response.bodyHandler(body -> {
-				context.assertTrue(body.toString().contains("foo"), body.toString());
-				context.async().complete();
-			});
+		getAndVerifyBody("/api/messages", body -> {
+			context.assertTrue(body.toString().contains("foo"), body.toString());
+			context.async().complete();
 		});
 	}
 
