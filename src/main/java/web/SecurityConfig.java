@@ -1,4 +1,4 @@
-package http;
+package web;
 
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;

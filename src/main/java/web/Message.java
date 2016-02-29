@@ -1,4 +1,4 @@
-package http;
+package web;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
