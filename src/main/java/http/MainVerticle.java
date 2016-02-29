@@ -34,7 +34,7 @@ public class MainVerticle extends AbstractVerticle {
 			log.info("Starting in development mode");
 		}
 
-		router.route().handler(SecurityConfig.addSecurityHeaders());
+		SecurityConfig.addSecurity(router, vertx);
 
 		// return a list of messages
 		router.route(HttpMethod.GET, "/api/messages").handler(

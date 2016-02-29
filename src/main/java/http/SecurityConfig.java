@@ -1,10 +1,31 @@
 package http;
 
 import io.vertx.core.Handler;
+import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServerResponse;
+import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
+import io.vertx.ext.web.handler.CSRFHandler;
+import io.vertx.ext.web.handler.CookieHandler;
+import io.vertx.ext.web.handler.SessionHandler;
+import io.vertx.ext.web.sstore.LocalSessionStore;
 
 public class SecurityConfig {
+
+	public static void addSecurity(Router router, Vertx vertx) {
+
+		// Sessions
+		router.route().handler(CookieHandler.create());
+		router.route().handler(
+				SessionHandler.create(LocalSessionStore.create(vertx)).setCookieHttpOnlyFlag(true)
+						.setCookieSecureFlag(true));
+
+		// CSRF
+		router.route().handler(CSRFHandler.create("not a good secret"));
+
+		// Headers
+		router.route().handler(addSecurityHeaders());
+	}
 
 	public static Handler<RoutingContext> addSecurityHeaders() {
 		return (RoutingContext rc) -> {
