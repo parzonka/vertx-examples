@@ -20,7 +20,7 @@ public class SecurityConfig {
 				SessionHandler.create(LocalSessionStore.create(vertx)).setCookieHttpOnlyFlag(true)
 						.setCookieSecureFlag(true));
 
-		// CSRF
+		// CSRF protection
 		router.route().handler(CSRFHandler.create("not a good secret"));
 
 		// Headers
