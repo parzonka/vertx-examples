@@ -9,7 +9,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
-		<main.verticle>http.MainVerticle</main.verticle>
+		<main.verticle>web.MainVerticle</main.verticle>
 		<!-- dependencies -->
 		<junit.version>4.12</junit.version>
 		<projectlombok.version>1.16.6</projectlombok.version>
