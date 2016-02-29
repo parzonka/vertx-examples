@@ -34,19 +34,7 @@ public class MainVerticle extends AbstractVerticle {
 				.end(Json.encode(list));
 	}
 
-	/**
-	 * Add message to local messages
-	 * 
-	 * @param routingContext
-	 */
-	private void addMessage(RoutingContext routingContext) {
-		final Message message = Json.decodeValue(routingContext.getBodyAsString(), Message.class);
-		messages.add(message);
-		routingContext.response().setStatusCode(201).putHeader("content-type", "application/json; charset=utf-8")
-				.end(Json.encodePrettily(message));
-	}
-
-	private static <T> Handler<RoutingContext> create(Class<T> clazz, Consumer<T> consumer) {
+	private static <T> Handler<RoutingContext> createFromJson(Class<T> clazz, Consumer<T> consumer) {
 		return (RoutingContext rc) -> {
 			final T instance = Json.decodeValue(rc.getBodyAsString(), clazz);
 			consumer.accept(instance);
@@ -68,7 +56,8 @@ public class MainVerticle extends AbstractVerticle {
 
 		// store post bodies in rc
 		router.route(HttpMethod.POST, "/api/*").handler(BodyHandler.create());
-		router.route(HttpMethod.POST, "/api/messages").handler(create(Message.class, message -> messages.add(message)));
+		router.route(HttpMethod.POST, "/api/messages").handler(
+				createFromJson(Message.class, message -> messages.add(message)));
 
 		// return a list of messages
 		router.route(HttpMethod.GET, "/api/messages").handler(json(messages));
