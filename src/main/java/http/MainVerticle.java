@@ -29,7 +29,6 @@ public class MainVerticle extends AbstractVerticle {
 
 		Router router = Router.router(vertx);
 
-		// apply security headers in production
 		if (Boolean.getBoolean("vertx.development")) {
 			log.info("Starting in development mode");
 		}
@@ -40,10 +39,10 @@ public class MainVerticle extends AbstractVerticle {
 		router.route(HttpMethod.GET, "/api/messages").handler(
 				json(new Message(42, "foo"), new Message(43, "bar"), new Message(44, "baz")));
 
-		// disabled cache for static asset reload
+		// disable cache for static asset reload
 		router.route("/*").handler(StaticHandler.create().setCachingEnabled(!Boolean.getBoolean("vertx.development")));
 
-		// enables http compression (e.g. gzip js)
+		// enable http compression (e.g. gzip js)
 		final HttpServerOptions options = new HttpServerOptions().setCompressionSupported(true);
 
 		// create server
