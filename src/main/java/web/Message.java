@@ -2,12 +2,14 @@ package web;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Message {
 
-	private final long id;
-	private final String content;
+	private long id;
+	private String content;
 
 }
