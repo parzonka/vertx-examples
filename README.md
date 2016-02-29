@@ -3,9 +3,15 @@
 
 # vert.x examples
 
-Optimized for Eclipse.
+Deployed continuously to https://vertx-examples.herokuapp.com
 
-Continuous deployment to https://vertx-examples.herokuapp.com
+Features:
+
+* Live recompile and restart after Java changes (configured for Eclipse IDE)
+* Live reload after changes to static resources
+* Responsive ES6 VueJS frontend with webpack dev server running against vert.x REST API
+* Maven builds backend and frontend
+* Packaging as fat jar
 
 
 
