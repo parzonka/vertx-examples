@@ -21,7 +21,9 @@ public class SecurityConfig {
 						.setCookieSecureFlag(true));
 
 		// CSRF protection
-		router.route().handler(CSRFHandler.create("not a good secret"));
+		if (!Boolean.getBoolean("vertx.development")) {
+			router.route().handler(CSRFHandler.create("not a good secret"));
+		}
 
 		// Headers
 		router.route().handler(addSecurityHeaders());
