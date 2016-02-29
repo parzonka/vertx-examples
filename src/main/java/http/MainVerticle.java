@@ -8,7 +8,9 @@ import io.vertx.core.json.Json;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.StaticHandler;
+import lombok.extern.java.Log;
 
+@Log
 public class MainVerticle extends AbstractVerticle {
 
 	/**
@@ -27,13 +29,19 @@ public class MainVerticle extends AbstractVerticle {
 
 		Router router = Router.router(vertx);
 
+		// apply security headers in production
+		if (Boolean.getBoolean("vertx.development")) {
+			log.info("Starting in development mode");
+		}
+
+		router.route().handler(SecurityConfig.addSecurityHeaders());
+
 		// return a list of messages
 		router.route(HttpMethod.GET, "/api/messages").handler(
 				json(new Message(42, "foo"), new Message(43, "bar"), new Message(44, "baz")));
 
 		// disabled cache for static asset reload
-		router.route("/*").handler(
-				StaticHandler.create().setCachingEnabled(!Boolean.getBoolean("vertx.disableFileCaching")));
+		router.route("/*").handler(StaticHandler.create().setCachingEnabled(!Boolean.getBoolean("vertx.development")));
 
 		// enables http compression (e.g. gzip js)
 		final HttpServerOptions options = new HttpServerOptions().setCompressionSupported(true);
@@ -42,4 +50,5 @@ public class MainVerticle extends AbstractVerticle {
 		vertx.createHttpServer(options).requestHandler(router::accept)
 				.listen(Integer.getInteger("server.port", 8080), System.getProperty("server.host", "0.0.0.0"));
 	}
+
 }
