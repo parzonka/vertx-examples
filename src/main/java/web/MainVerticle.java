@@ -29,7 +29,7 @@ public class MainVerticle extends AbstractVerticle {
 	 * @param objects
 	 * @return
 	 */
-	private static Handler<RoutingContext> json(List<?> list) {
+	private static Handler<RoutingContext> toJson(List<?> list) {
 		return (RoutingContext rc) -> rc.response().putHeader("content-type", "application/json; charset=utf-8")
 				.end(Json.encode(list));
 	}
@@ -60,7 +60,7 @@ public class MainVerticle extends AbstractVerticle {
 				createFromJson(Message.class, message -> messages.add(message)));
 
 		// return a list of messages
-		router.route(HttpMethod.GET, "/api/messages").handler(json(messages));
+		router.route(HttpMethod.GET, "/api/messages").handler(toJson(messages));
 
 		// disable cache for static asset reload
 		router.route("/*").handler(StaticHandler.create().setCachingEnabled(!Boolean.getBoolean("vertx.development")));
