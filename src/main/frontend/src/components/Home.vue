@@ -10,9 +10,13 @@
           <button class="btn btn-primary btn-block" @click="post">Send</button>
         </div>
       </div>
-      <ul class="list-group">
-        <li v-for="message in messages" class="list-group-item">{{message.content}}</li>
-      </ul>
+      <div class="row">
+        <div class="col-sm-12">
+          <ul class="list-group">
+            <li v-for="message in messages" class="list-group-item">{{message.content}}</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -48,11 +52,14 @@ h1 {
   text-align: center;
   margin: 20px;
 }
+.row {
+  padding-left: 10px;
+  padding-right: 10px;
+}
 .form-inline {
   margin-top: 20px;
   margin-bottom: 20px;
 }
-
 .container {
   max-width: 500px;
 }
