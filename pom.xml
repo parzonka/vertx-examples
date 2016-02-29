@@ -114,7 +114,7 @@
 					<plugin>
 						<groupId>com.github.eirslett</groupId>
 						<artifactId>frontend-maven-plugin</artifactId>
-						<version>0.0.27</version>
+						<version>0.0.28</version>
 						<configuration>
 							<workingDirectory>${basedir}/src/main/frontend</workingDirectory>
 							<installDirectory>target</installDirectory>
@@ -128,7 +128,6 @@
 								<configuration>
 									<nodeVersion>v5.5.0</nodeVersion>
 									<npmVersion>3.3.12</npmVersion>
-									
 								</configuration>
 							</execution>
 							<execution>
