@@ -13,11 +13,15 @@ import io.vertx.ext.web.handler.StaticHandler;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 import lombok.extern.java.Log;
 
 @Log
 public class MainVerticle extends AbstractVerticle {
+
+	private final List<Message> messages = new ArrayList<>(Arrays.asList(new Message(42, "foo"),
+			new Message(43, "bar"), new Message(44, "baz")));
 
 	/**
 	 * Ends response with a JSON list of objects
@@ -42,8 +46,14 @@ public class MainVerticle extends AbstractVerticle {
 				.end(Json.encodePrettily(message));
 	}
 
-	private final List<Message> messages = new ArrayList<>(Arrays.asList(new Message(42, "foo"),
-			new Message(43, "bar"), new Message(44, "baz")));
+	private static <T> Handler<RoutingContext> create(Class<T> clazz, Consumer<T> consumer) {
+		return (RoutingContext rc) -> {
+			final T instance = Json.decodeValue(rc.getBodyAsString(), clazz);
+			consumer.accept(instance);
+			rc.response().setStatusCode(201).putHeader("content-type", "application/json; charset=utf-8")
+					.end(Json.encodePrettily(instance));
+		};
+	}
 
 	@Override
 	public void start() {
@@ -58,7 +68,7 @@ public class MainVerticle extends AbstractVerticle {
 
 		// store post bodies in rc
 		router.route(HttpMethod.POST, "/api/*").handler(BodyHandler.create());
-		router.route(HttpMethod.POST, "/api/messages").handler(this::addMessage);
+		router.route(HttpMethod.POST, "/api/messages").handler(create(Message.class, message -> messages.add(message)));
 
 		// return a list of messages
 		router.route(HttpMethod.GET, "/api/messages").handler(json(messages));
