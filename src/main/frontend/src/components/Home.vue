@@ -13,7 +13,10 @@
       <div class="row">
         <div class="col-sm-12">
           <ul class="list-group">
-            <li v-for="message in messages" class="list-group-item">{{message.content}}</li>
+            <li v-for="message in messages" class="list-group-item">
+             <span class="btn label label-pill label-default pull-right" @click="remove(42)"><i class="fa fa-remove"></i></span>
+              {{message.content}}
+            </li>
           </ul>
         </div>
       </div>
@@ -33,13 +36,14 @@ export default {
     }
   },
   methods: {
-    getAll: () => axios.get('api/messages').then(res => self.messages = res.data),
+    getAll: () => axios.get('api/messages/').then(res => self.messages = res.data),
     post: () => {
       if (self.content !== '') {
-        axios.post('api/messages', {id: 1, content: self.content}).then(self.getAll)
+        axios.post('api/messages/', {id: 1, content: self.content}).then(self.getAll)
         self.content = ''
       }
-    }
+    },
+    remove: id => axios.delete('api/messages/' + id).then(self.getAll)
   },
   ready() {
     self.getAll()
@@ -47,7 +51,8 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="sass" scoped>
+@import "../bootstrap/_theme.scss";
 h1 {
   text-align: center;
   margin: 20px;
@@ -62,5 +67,11 @@ h1 {
 }
 .container {
   max-width: 500px;
+}
+.label-pill {
+  margin-top: 0.3em;
+  &:hover {
+    background-color: $brand-danger;
+  }
 }
 </style>
