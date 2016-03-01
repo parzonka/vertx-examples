@@ -10,18 +10,14 @@ import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import lombok.extern.java.Log;
 
 @Log
 public class MainVerticle extends AbstractVerticle {
-
-	private final List<Message> messages = new ArrayList<>(Arrays.asList(new Message(42, "foo"),
-			new Message(43, "bar"), new Message(44, "baz")));
 
 	/**
 	 * Ends response with a JSON list of objects
@@ -29,9 +25,11 @@ public class MainVerticle extends AbstractVerticle {
 	 * @param objects
 	 * @return
 	 */
-	private static Handler<RoutingContext> toJson(List<?> list) {
-		return (RoutingContext rc) -> rc.response().putHeader("content-type", "application/json; charset=utf-8")
-				.end(Json.encode(list));
+	private static Handler<RoutingContext> toJson(Supplier<List<?>> listSupplier) {
+		return (RoutingContext rc) -> {
+			rc.response().putHeader("content-type", "application/json; charset=utf-8")
+					.end(Json.encode(listSupplier.get()));
+		};
 	}
 
 	private static <T> Handler<RoutingContext> createFromJson(Class<T> clazz, Consumer<T> consumer) {
@@ -43,10 +41,21 @@ public class MainVerticle extends AbstractVerticle {
 		};
 	}
 
+	private static Handler<RoutingContext> createFromString(Consumer<String> consumer) {
+		return (RoutingContext rc) -> {
+			final String instance = rc.getBodyAsString();
+			consumer.accept(instance);
+			rc.response().setStatusCode(201).putHeader("content-type", "application/json; charset=utf-8")
+					.end(Json.encodePrettily(instance));
+		};
+	}
+
 	@Override
 	public void start() {
 
-		Router router = Router.router(vertx);
+		final MessageService messageService = new MessageService("foo", "bar", "baz");
+
+		final Router router = Router.router(vertx);
 
 		if (Boolean.getBoolean("vertx.development")) {
 			log.info("Starting in development mode");
@@ -57,10 +66,17 @@ public class MainVerticle extends AbstractVerticle {
 		// store post bodies in rc
 		router.route(HttpMethod.POST, "/api/*").handler(BodyHandler.create());
 		router.route(HttpMethod.POST, "/api/messages").handler(
-				createFromJson(Message.class, message -> messages.add(message)));
+				createFromString(message -> messageService.store(message)));
 
 		// return a list of messages
-		router.route(HttpMethod.GET, "/api/messages").handler(toJson(messages));
+		router.route(HttpMethod.GET, "/api/messages").handler(toJson(() -> messageService.getMessages()));
+
+		// return a list of messages
+		router.route(HttpMethod.DELETE, "/api/messages/:id").handler(rc -> {
+			final String id = rc.request().getParam("id");
+			messageService.deleteMessage(Long.parseLong(id));
+			rc.response().setStatusCode(204).end();
+		});
 
 		// disable cache for static asset reload
 		router.route("/*").handler(StaticHandler.create().setCachingEnabled(!Boolean.getBoolean("vertx.development")));

@@ -13,8 +13,8 @@
       <div class="row">
         <div class="col-sm-12">
           <ul class="list-group">
-            <li v-for="message in messages" class="list-group-item">
-             <span class="btn label label-pill label-default pull-right" @click="remove(42)"><i class="fa fa-remove"></i></span>
+            <li v-for="message in messages" track-by="id" class="list-group-item">
+             <span class="btn label label-pill label-default pull-right" @click="remove(message.id)"><i class="fa fa-remove"></i></span>
               {{message.content}}
             </li>
           </ul>
@@ -36,10 +36,10 @@ export default {
     }
   },
   methods: {
-    getAll: () => axios.get('api/messages/').then(res => self.messages = res.data),
+    getAll: () => axios.get('api/messages').then(res => self.messages = res.data),
     post: () => {
       if (self.content !== '') {
-        axios.post('api/messages/', {id: 1, content: self.content}).then(self.getAll)
+        axios.post('api/messages', self.content).then(self.getAll)
         self.content = ''
       }
     },
