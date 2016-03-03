@@ -20,14 +20,14 @@ public class MessageService {
 		}
 	}
 
-	public long store(String content) {
+	public Message store(String content) {
 		final long id = counter.incrementAndGet();
-		messages.put(id, new Message(id, content));
-		return id;
+		Message message = new Message(id, content);
+		messages.put(id, message);
+		return message;
 	}
 
 	public void deleteMessage(long id) {
-		System.out.println("removing" + id);
 		messages.remove(id);
 	}
 
