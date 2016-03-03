@@ -14,7 +14,9 @@
         <div class="col-sm-12">
           <ul class="list-group">
             <li v-for="message in messages" track-by="id" class="list-group-item">
-             <span class="btn label label-pill label-default pull-right" @click="remove(message.id)"><i class="fa fa-remove"></i></span>
+             <span class="btn label label-pill label-default pull-right" @click="remove(message.id)">
+                <i class="fa fa-remove"></i>
+              </span>
               {{message.content}}
             </li>
           </ul>
