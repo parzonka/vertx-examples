@@ -21,14 +21,14 @@ public class MessageController {
 
 	protected void configure() {
 
-		// return a list of messages
+		// returns all messages
 		router.route(HttpMethod.GET, "/messages").handler(respondWithJson(request -> messageService.getMessages()));
 
-		//
-		router.route(HttpMethod.POST, "/messages").handler(rc -> {
-			final String content = rc.getBodyAsString();
+		// stores a message
+		router.route(HttpMethod.POST, "/messages").handler(routingContext -> {
+			final String content = routingContext.getBodyAsString();
 			final Message message = messageService.store(content);
-			respondWithCreated(rc, "" + message.getId(), message);
+			respondWithCreated(routingContext, "" + message.getId(), message);
 		});
 
 		// deletes a message

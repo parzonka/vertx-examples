@@ -10,13 +10,13 @@ import java.util.function.Function;
 
 public class ResponseUtil {
 
-	public static void respondWithCreated(RoutingContext rc, String location, Object content) {
-		rc.response().setStatusCode(200).putHeader("content-type", "application/json; charset=utf-8")
-				.putHeader("Location", rc.request().absoluteURI() + "/" + location).end(Json.encode(content));
+	public static void respondWithCreated(RoutingContext routingContext, String location, Object content) {
+		routingContext.response().setStatusCode(200).putHeader("content-type", "application/json; charset=utf-8")
+				.putHeader("Location", routingContext.request().absoluteURI() + "/" + location).end(Json.encode(content));
 	}
 
-	public static void respondWithDeleted(RoutingContext rc) {
-		rc.response().setStatusCode(204).putHeader("content-type", "application/json; charset=utf-8").end();
+	public static void respondWithDeleted(RoutingContext routingContext) {
+		routingContext.response().setStatusCode(204).putHeader("content-type", "application/json; charset=utf-8").end();
 	}
 
 	public static Handler<RoutingContext> respondWithJson(Function<HttpServerRequest, List<?>> listSupplier) {
