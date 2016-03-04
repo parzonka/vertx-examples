@@ -1,7 +1,8 @@
 <template>
   <div class="users" v-on:keyup.enter="post">
     <div class="container">
-      <h1>Messages</h1>
+      <h1>Message Wall</h1>
+      <small id="socket-info" class="text-muted center-block">Connected users: {{connectionCount}}</small>
       <div class="form-group row">
         <div class="col-sm-9">
           <input class="form-control" placeholder="Message" v-model="content" >
@@ -36,7 +37,8 @@ export default {
     self = this
     return {
       content: '',
-      messages: []
+      messages: [],
+      connectionCount: 1
     }
   },
   methods: {
@@ -55,15 +57,21 @@ export default {
     self.getAll()
     eventbus.handle('messages/created', message => self.messages.push(message))
     eventbus.handle('messages/deleted', message => remove(self.messages, storedMessage => message.id === storedMessage.id))
+    eventbus.handle('connections', connections => self.connectionCount = connections.count)
   }
 }
 </script>
 
 <style lang="sass" scoped>
 @import "../bootstrap/_theme.scss";
+// clean sass styling is not a focus here
 h1 {
   text-align: center;
-  margin: 20px;
+  margin-top: 20px;
+}
+#socket-info {
+  text-align: center;
+   margin-bottom: 20px;
 }
 .row {
   padding-left: 10px;
