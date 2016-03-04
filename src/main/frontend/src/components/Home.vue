@@ -1,5 +1,5 @@
 <template>
-  <div class="users">
+  <div class="users" v-on:keyup.enter="post">
     <div class="container">
       <h1>Messages</h1>
       <div class="form-group row">
