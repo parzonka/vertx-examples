@@ -28,6 +28,7 @@
 
 <script>
 import axios from 'axios'
+import eventbus from './../eventbus'
 let self
 export default {
   data () {
@@ -41,7 +42,7 @@ export default {
     getAll: () => axios.get('api/messages').then(res => self.messages = res.data),
     post: () => {
       if (self.content !== '') {
-        axios.post('api/messages', self.content).then(self.getAll)
+        axios.post('api/messages', self.content)
         self.content = ''
       }
     },
@@ -49,6 +50,7 @@ export default {
   },
   ready() {
     self.getAll()
+    eventbus.handle('messages/created', message => self.messages.push(message))
   }
 }
 </script>
