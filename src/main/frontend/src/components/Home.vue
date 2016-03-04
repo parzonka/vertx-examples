@@ -29,6 +29,7 @@
 <script>
 import axios from 'axios'
 import eventbus from './../eventbus'
+import { remove } from './../util'
 let self
 export default {
   data () {
@@ -46,11 +47,14 @@ export default {
         self.content = ''
       }
     },
-    remove: id => axios.delete('api/messages/' + id).then(self.getAll)
+    remove: id => axios.delete('api/messages/' + id)
   },
   ready() {
+    // when the component is loaded 1. the current state is fetched from the server
+    // 2. push create and delete handlers are registered
     self.getAll()
     eventbus.handle('messages/created', message => self.messages.push(message))
+    eventbus.handle('messages/deleted', message => remove(self.messages, storedMessage => message.id === storedMessage.id))
   }
 }
 </script>
