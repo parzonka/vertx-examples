@@ -15,7 +15,7 @@ public class MessageController {
 
 	public MessageController(Vertx vertx) {
 		this.router = Router.router(vertx);
-		this.messageService = new MessageService("foo", "bar", "baz");
+		this.messageService = new MessageService(vertx, "foo", "bar", "baz");
 		configure();
 	}
 
