@@ -26,7 +26,7 @@ public class MainVerticle extends AbstractVerticle {
 		// store post bodies in rc for all api calls
 		router.route(HttpMethod.POST, "/api/*").handler(BodyHandler.create());
 		// mount sub routers
-		router.mountSubRouter("/api", new MessageController(vertx).getRouter());
+		router.mountSubRouter("/api/messages", new MessageController(vertx).getRouter());
 
 		// register sockjs bridge to event bus
 		router.route("/eventbus/*").handler(new SockJSBridge(vertx));

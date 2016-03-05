@@ -22,17 +22,17 @@ public class MessageController {
 	protected void configure() {
 
 		// returns all messages
-		router.route(HttpMethod.GET, "/messages").handler(respondWithJson(request -> messageService.getMessages()));
+		router.route(HttpMethod.GET, "/").handler(respondWithJson(request -> messageService.getMessages()));
 
 		// stores a message
-		router.route(HttpMethod.POST, "/messages").handler(routingContext -> {
+		router.route(HttpMethod.POST, "/").handler(routingContext -> {
 			final String content = routingContext.getBodyAsString();
 			final Message message = messageService.store(content);
 			respondWithCreated(routingContext, "" + message.getId(), message);
 		});
 
 		// deletes a message
-		router.route(HttpMethod.DELETE, "/messages/:id").handler(routingContext -> {
+		router.route(HttpMethod.DELETE, "/:id").handler(routingContext -> {
 			final long id = Long.parseLong(routingContext.request().getParam("id"));
 			messageService.deleteMessage(id);
 			respondWithDeleted(routingContext);
