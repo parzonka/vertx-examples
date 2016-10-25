@@ -2,7 +2,7 @@
   <div class="users" v-on:keyup.enter="post">
     <div class="container">
       <h1>Message Wall</h1>
-      <small id="socket-info" class="text-muted center-block">Connected users: {{connectionCount}}</small>
+      <div id="socket-info" class="text-muted">Connected users: {{connectionCount}}</div>
       <div class="form-group row">
         <div class="col-sm-9">
           <input class="form-control" placeholder="Message" v-model="content" >
@@ -15,8 +15,8 @@
         <div class="col-sm-12">
           <ul class="list-group">
             <li v-for="message in messages" track-by="id" class="list-group-item">
-             <span class="btn label label-pill label-default pull-right" @click="remove(message.id)">
-                <i class="fa fa-remove"></i>
+             <span class="btn btn-sm label label-pill label-default pull-right" @click="remove(message.id)">
+                <i class="fa fa-remove remove-cross"></i>
               </span>
               {{message.content}}
             </li>
@@ -27,7 +27,7 @@
   </div>
 </template>
 
-<script>
+<script type="text/babel">
 import axios from 'axios'
 import eventbus from './../eventbus'
 import { remove } from './../util'
@@ -62,16 +62,16 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="scss" scoped>
 @import "../bootstrap/_theme.scss";
-// clean sass styling is not a focus here
 h1 {
   text-align: center;
   margin-top: 20px;
 }
+
 #socket-info {
   text-align: center;
-   margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 .row {
   padding-left: 10px;
@@ -85,9 +85,16 @@ h1 {
   max-width: 500px;
 }
 .label-pill {
-  margin-top: 0.3em;
+  border-radius: 10px;
   &:hover {
     background-color: $brand-danger;
+    .remove-cross {
+      color: #fff;
+    }
   }
 }
+.remove-cross {
+  color: #aaa;
+}
 </style>
+
