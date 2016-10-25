@@ -188,6 +188,14 @@
 							</execution>
 						</executions>
 					</plugin>
+					<plugin>
+						<groupId>com.versioneye</groupId>
+						<artifactId>versioneye-maven-plugin</artifactId>
+						<version>3.11.0</version>
+						<configuration>
+							<projectId>56d1b132157a69002ea956ed</projectId>
+						</configuration>
+					</plugin>
 				</plugins>
 			</build>
 		</profile>
