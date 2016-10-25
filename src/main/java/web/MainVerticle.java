@@ -17,11 +17,13 @@ public class MainVerticle extends AbstractVerticle {
 
 		final Router router = Router.router(vertx);
 
-		if (Boolean.getBoolean("vertx.development")) {
-			log.info("Starting in development mode");
+		// secure only in production
+		if (!Boolean.getBoolean("vertx.development")) {
+			System.out.println("production mode");
+			SecurityConfig.addSecurity(router, vertx);
+		} else {
+			System.out.println("development mode");
 		}
-
-		SecurityConfig.addSecurity(router, vertx);
 
 		// store post bodies in rc for all api calls
 		router.route(HttpMethod.POST, "/api/*").handler(BodyHandler.create());
