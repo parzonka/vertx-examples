@@ -11,7 +11,7 @@ public class MessageController {
 
 	private final Router router;
 
-	final MessageService messageService;
+	private final MessageService messageService;
 
 	public MessageController(Vertx vertx) {
 		this.router = Router.router(vertx);

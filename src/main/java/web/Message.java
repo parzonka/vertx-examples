@@ -1,16 +1,12 @@
 package web;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Value;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Value
 public class Message implements Comparable<Message> {
 
-	private long id;
-	private String content;
+	private final long id;
+	private final String content;
 
 	@Override
 	public int compareTo(Message o) {
